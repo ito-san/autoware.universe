@@ -65,6 +65,8 @@ ProcessMonitor::ProcessMonitor(const rclcpp::NodeOptions & options)
 
 void ProcessMonitor::monitorProcesses(diagnostic_updater::DiagnosticStatusWrapper & stat)
 {
+  RCLCPP_INFO(get_logger(), "> enter");
+
   // thread-safe read
   std::string str;
   bool is_top_error;
@@ -112,11 +114,15 @@ void ProcessMonitor::monitorProcesses(diagnostic_updater::DiagnosticStatusWrappe
   getHighMemoryProcesses(str);
 
   stat.addf("execution time", "%f ms", elapsed_ms);
+
+  RCLCPP_INFO(get_logger(), "< exit");
 }
 
 void ProcessMonitor::getTasksSummary(
   diagnostic_updater::DiagnosticStatusWrapper & stat, const std::string & output)
 {
+  RCLCPP_INFO(get_logger(), "> enter");
+
   // boost::process create file descriptor without O_CLOEXEC required for multithreading.
   // So create file descriptor with O_CLOEXEC and pass it to boost::process.
   int p_fd[2];
@@ -149,8 +155,11 @@ void ProcessMonitor::getTasksSummary(
     bp::pipe err_pipe{err_fd[0], err_fd[1]};
     bp::ipstream is_err{std::move(err_pipe)};
 
+    RCLCPP_INFO(get_logger(), "> echo");
     bp::child c(fmt::format("echo {}", output), bp::std_out > p, bp::std_err > is_err);
     c.wait();
+    RCLCPP_INFO(get_logger(), "< echo");
+  
     if (c.exit_code() != 0) {
       std::ostringstream os;
       is_err >> os.rdbuf();
@@ -170,8 +179,11 @@ void ProcessMonitor::getTasksSummary(
     bp::pipe out_pipe{out_fd[0], out_fd[1]};
     bp::ipstream is_out{std::move(out_pipe)};
 
+    RCLCPP_INFO(get_logger(), "> grep Tasks:");
     bp::child c("grep Tasks:", bp::std_out > is_out, bp::std_in < p);
     c.wait();
+    RCLCPP_INFO(get_logger(), "< grep Tasks:");
+  
     // no matching line
     if (c.exit_code() != 0) {
       stat.summary(DiagStatus::ERROR, "matching pattern not found");
@@ -196,11 +208,15 @@ void ProcessMonitor::getTasksSummary(
       stat.summary(DiagStatus::ERROR, "invalid format");
     }
   }
+
+  RCLCPP_INFO(get_logger(), "< exit");
 }
 
 void ProcessMonitor::removeHeader(
   diagnostic_updater::DiagnosticStatusWrapper & stat, std::string & output)
 {
+  RCLCPP_INFO(get_logger(), "> enter");
+
   // boost::process create file descriptor without O_CLOEXEC required for multithreading.
   // So create file descriptor with O_CLOEXEC and pass it to boost::process.
   int p1_fd[2];
@@ -232,8 +248,11 @@ void ProcessMonitor::removeHeader(
     bp::pipe err_pipe{err_fd[0], err_fd[1]};
     bp::ipstream is_err{std::move(err_pipe)};
 
+    RCLCPP_INFO(get_logger(), "> echo");
     bp::child c(fmt::format("echo {}", output), bp::std_out > p1, bp::std_err > is_err);
     c.wait();
+    RCLCPP_INFO(get_logger(), "< echo");
+
     if (c.exit_code() != 0) {
       is_err >> os.rdbuf();
       stat.summary(DiagStatus::ERROR, "echo error");
@@ -252,8 +271,11 @@ void ProcessMonitor::removeHeader(
     bp::pipe err_pipe{err_fd[0], err_fd[1]};
     bp::ipstream is_err{std::move(err_pipe)};
 
+    RCLCPP_INFO(get_logger(), "> sed");
     bp::child c("sed \"/^%Cpu/d\"", bp::std_out > p2, bp::std_err > is_err, bp::std_in < p1);
     c.wait();
+    RCLCPP_INFO(get_logger(), "< sed");
+  
     // no matching line
     if (c.exit_code() != 0) {
       stat.summary(DiagStatus::ERROR, "sed error");
@@ -281,8 +303,11 @@ void ProcessMonitor::removeHeader(
     bp::pipe err_pipe{err_fd[0], err_fd[1]};
     bp::ipstream is_err{std::move(err_pipe)};
 
+    RCLCPP_INFO(get_logger(), "> sed");
     bp::child c("sed \"1,6d\"", bp::std_out > is_out, bp::std_err > is_err, bp::std_in < p2);
     c.wait();
+    RCLCPP_INFO(get_logger(), "< sed");
+  
     // no matching line
     if (c.exit_code() != 0) {
       stat.summary(DiagStatus::ERROR, "sed error");
@@ -293,10 +318,14 @@ void ProcessMonitor::removeHeader(
     is_out >> os.rdbuf();
     output = os.str();
   }
+
+  RCLCPP_INFO(get_logger(), "< exit");
 }
 
 void ProcessMonitor::getHighLoadProcesses(const std::string & output)
 {
+  RCLCPP_INFO(get_logger(), "> enter");
+
   // boost::process create file descriptor without O_CLOEXEC required for multithreading.
   // So create file descriptor with O_CLOEXEC and pass it to boost::process.
   int p_fd[2];
@@ -325,8 +354,11 @@ void ProcessMonitor::getHighLoadProcesses(const std::string & output)
   bp::pipe err_pipe{err_fd[0], err_fd[1]};
   bp::ipstream is_err{std::move(err_pipe)};
 
+  RCLCPP_INFO(get_logger(), "> echo");
   bp::child c(fmt::format("echo {}", output), bp::std_out > p, bp::std_err > is_err);
   c.wait();
+  RCLCPP_INFO(get_logger(), "< echo");
+
   if (c.exit_code() != 0) {
     is_err >> os.rdbuf();
     setErrorContent(&load_tasks_, "echo error", "echo", os.str().c_str());
@@ -335,10 +367,14 @@ void ProcessMonitor::getHighLoadProcesses(const std::string & output)
 
   // Get top-rated
   getTopratedProcesses(&load_tasks_, &p);
+
+  RCLCPP_INFO(get_logger(), "< exit");
 }
 
 void ProcessMonitor::getHighMemoryProcesses(const std::string & output)
 {
+  RCLCPP_INFO(get_logger(), "> enter");
+
   // boost::process create file descriptor without O_CLOEXEC required for multithreading.
   // So create file descriptor with O_CLOEXEC and pass it to boost::process.
   int p1_fd[2];
@@ -375,8 +411,11 @@ void ProcessMonitor::getHighMemoryProcesses(const std::string & output)
     bp::pipe err_pipe{err_fd[0], err_fd[1]};
     bp::ipstream is_err{std::move(err_pipe)};
 
+    RCLCPP_INFO(get_logger(), "> echo");
     bp::child c(fmt::format("echo {}", output), bp::std_out > p1, bp::std_err > is_err);
     c.wait();
+    RCLCPP_INFO(get_logger(), "< echo");
+
     if (c.exit_code() != 0) {
       is_err >> os.rdbuf();
       setErrorContent(&memory_tasks_, "echo error", "echo", os.str().c_str());
@@ -401,8 +440,11 @@ void ProcessMonitor::getHighMemoryProcesses(const std::string & output)
     bp::pipe err_pipe{err_fd[0], err_fd[1]};
     bp::ipstream is_err{std::move(err_pipe)};
 
+    RCLCPP_INFO(get_logger(), "> sort");
     bp::child c("sort -r -k 10", bp::std_out > p2, bp::std_err > is_err, bp::std_in < p1);
     c.wait();
+    RCLCPP_INFO(get_logger(), "< sort");
+
     if (c.exit_code() != 0) {
       is_err >> os.rdbuf();
       setErrorContent(&memory_tasks_, "sort error", "sort", os.str().c_str());
@@ -412,11 +454,15 @@ void ProcessMonitor::getHighMemoryProcesses(const std::string & output)
 
   // Get top-rated
   getTopratedProcesses(&memory_tasks_, &p2);
+
+  RCLCPP_INFO(get_logger(), "< exit");
 }
 
 void ProcessMonitor::getTopratedProcesses(
   std::vector<std::shared_ptr<DiagTask>> * tasks, bp::pipe * p)
 {
+  RCLCPP_INFO(get_logger(), "> enter");
+
   if (tasks == nullptr || p == nullptr) {
     return;
   }
@@ -439,11 +485,14 @@ void ProcessMonitor::getTopratedProcesses(
 
   std::ostringstream os;
 
+  RCLCPP_INFO(get_logger(), "> sed");
   bp::child c(
     fmt::format("sed -n \"1,{} p\"", num_of_procs_), bp::std_out > is_out, bp::std_err > is_err,
     bp::std_in < *p);
 
   c.wait();
+  RCLCPP_INFO(get_logger(), "< sed");
+
   // Failed to modify line
   if (c.exit_code() != 0) {
     is_err >> os.rdbuf();
@@ -474,12 +523,16 @@ void ProcessMonitor::getTopratedProcesses(
     tasks->at(index)->setCommandName(list[11]);
     ++index;
   }
+
+  RCLCPP_INFO(get_logger(), "< exit");
 }
 
 void ProcessMonitor::setErrorContent(
   std::vector<std::shared_ptr<DiagTask>> * tasks, const std::string & message,
   const std::string & error_command, const std::string & content)
 {
+  RCLCPP_INFO(get_logger(), "> enter");
+
   if (tasks == nullptr) {
     return;
   }
@@ -488,10 +541,14 @@ void ProcessMonitor::setErrorContent(
     (*itr)->setDiagnosticsStatus(DiagStatus::ERROR, message);
     (*itr)->setErrorContent(error_command, content);
   }
+
+  RCLCPP_INFO(get_logger(), "< exit");
 }
 
 void ProcessMonitor::onTimer()
 {
+  RCLCPP_INFO(get_logger(), "> enter");
+
   bool is_top_error = false;
 
   // Start to measure elapsed time
@@ -520,9 +577,13 @@ void ProcessMonitor::onTimer()
 
   std::ostringstream os;
 
+  RCLCPP_INFO(get_logger(), "> top");
+
   // Get processes
   bp::child c("top -bn1 -o %CPU -w 128", bp::std_out > is_out, bp::std_err > is_err);
   c.wait();
+
+  RCLCPP_INFO(get_logger(), "< top");
 
   if (c.exit_code() != 0) {
     is_top_error = true;
@@ -541,6 +602,8 @@ void ProcessMonitor::onTimer()
     is_pipe2_error_ = false;
     elapsed_ms_ = elapsed_ms;
   }
+
+  RCLCPP_INFO(get_logger(), "< exit");
 }
 
 #include <rclcpp_components/register_node_macro.hpp>
