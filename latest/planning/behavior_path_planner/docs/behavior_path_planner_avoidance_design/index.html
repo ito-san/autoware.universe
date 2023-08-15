@@ -311,7 +311,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../../localization/ekf_localizer/" class="md-tabs__link">
+      <a href="../../../../localization/ar_tag_based_localizer/" class="md-tabs__link">
         Localization
       </a>
     </li>
@@ -5273,14 +5273,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../../localization/ekf_localizer/">Ekf localizer</a>
+          <a href="../../../../localization/ar_tag_based_localizer/">Ar tag based localizer</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_5_1">
           <span class="md-nav__icon md-icon"></span>
-          Ekf localizer
+          Ar tag based localizer
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -5321,14 +5321,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../../localization/gyro_odometer/">Gyro odometer</a>
+          <a href="../../../../localization/ekf_localizer/">Ekf localizer</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_5_2">
           <span class="md-nav__icon md-icon"></span>
-          Gyro odometer
+          Ekf localizer
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -5369,14 +5369,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../../localization/initial_pose_button_panel/">Initial pose button panel</a>
+          <a href="../../../../localization/gyro_odometer/">Gyro odometer</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_5_3">
           <span class="md-nav__icon md-icon"></span>
-          Initial pose button panel
+          Gyro odometer
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -6000,6 +6000,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -6130,16 +6132,64 @@
       
         
           
+            
+          
         
       
       
-        <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../../../map/map_projection_loader/">Map projection loader</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6_3">
+          <span class="md-nav__icon md-icon"></span>
+          Map projection loader
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_4" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_6_4" id="__nav_6_4_label" tabindex="0">
           Map tf generator
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_6_3">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6_4">
           <span class="md-nav__icon md-icon"></span>
           Map tf generator
         </label>
@@ -15342,13 +15392,13 @@ SHIFT_{current} &gt; L_{threshold}
 <p><img alt="fig1" src="../../image/avoidance/yield_maneuver_flowchart.svg"></p>
 <hr>
 <h3 id="avoidance-cancelling-maneuver">Avoidance cancelling maneuver<a class="headerlink" href="#avoidance-cancelling-maneuver" title="Permanent link">#</a></h3>
-<p>If <code>enable_update_path_when_object_is_gone</code> parameter is true, Avoidance Module takes different actions according to the situations as follows:</p>
+<p>If <code>enable_cancel_maneuver</code> parameter is true, Avoidance Module takes different actions according to the situations as follows:</p>
 <ul>
 <li>If vehicle stops: If there is any object in the path of the vehicle, the avoidance path is generated. If this object goes away while the vehicle is stopping, the avoidance path will cancelled.</li>
 <li>If vehicle is in motion, but avoidance maneuver doesn't started: If there is any object in the path of the vehicle, the avoidance path is generated. If this object goes away while the vehicle is not started avoidance maneuver, the avoidance path will cancelled.</li>
 <li>If vehicle is in motion, avoidance maneuver started: If there is any object in the path of the vehicle, the avoidance path is generated,but if this object goes away while the vehicle is started avoidance maneuver, the avoidance path will not cancelled.</li>
 </ul>
-<p>If <code>enable_update_path_when_object_is_gone</code> parameter is false, Avoidance Module doesn't revert generated avoidance path even if path objects are gone.</p>
+<p>If <code>enable_cancel_maneuver</code> parameter is false, Avoidance Module doesn't revert generated avoidance path even if path objects are gone.</p>
 <h2 id="how-to-keep-the-consistency-of-the-optimize-base-path-generation-logic">How to keep the consistency of the optimize-base path generation logic<a class="headerlink" href="#how-to-keep-the-consistency-of-the-optimize-base-path-generation-logic" title="Permanent link">#</a></h2>
 <p>WIP</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
@@ -15395,7 +15445,7 @@ SHIFT_{current} &gt; L_{threshold}
 <td align="left">1.0</td>
 </tr>
 <tr>
-<td align="left">enable_update_path_when_object_is_gone</td>
+<td align="left">enable_cancel_maneuver</td>
 <td align="left">[-]</td>
 <td align="left">bool</td>
 <td align="left">Reset trajectory when avoided objects are gone. If false, shifted path points remain same even though the avoided objects are gone.</td>
@@ -16135,7 +16185,7 @@ SHIFT_{current} &gt; L_{threshold}
 <h3 id="publishing-visualization-marker">Publishing Visualization Marker<a class="headerlink" href="#publishing-visualization-marker" title="Permanent link">#</a></h3>
 <p>Developers can see what is going on in each process by visualizing all the avoidance planning process outputs. The example includes target vehicles, shift points for each object, shift points after each filtering process, etc.</p>
 <p><img alt="fig1" src="../../image/avoidance/avoidance-debug-marker.png"></p>
-<p>To enable the debug marker, execute <code>ros2 param set /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner avoidance.output_debug_marker true</code> (no restart is needed) or simply set the <code>output_debug_marker</code> to <code>true</code> in the <code>avoidance.param.yaml</code> for permanent effect (restart is needed). Then add the marker <code>/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/avoidance</code> in <code>rviz2</code>.</p>
+<p>To enable the debug marker, execute <code>ros2 param set /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner avoidance.publish_debug_marker true</code> (no restart is needed) or simply set the <code>publish_debug_marker</code> to <code>true</code> in the <code>avoidance.param.yaml</code> for permanent effect (restart is needed). Then add the marker <code>/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/avoidance</code> in <code>rviz2</code>.</p>
 <h3 id="echoing-debug-message-to-find-out-why-the-objects-were-ignored">Echoing debug message to find out why the objects were ignored<a class="headerlink" href="#echoing-debug-message-to-find-out-why-the-objects-were-ignored" title="Permanent link">#</a></h3>
 <p>If for some reason, no shift point is generated for your object, you can check for the failure reason via <code>ros2 topic echo</code>.</p>
 <p><img alt="avoidance_debug_message_array" src="../../image/avoidance/avoidance_debug_message_array.png"></p>
