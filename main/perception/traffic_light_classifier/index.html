@@ -8497,6 +8497,8 @@
         
           
         
+          
+        
       
       
         
@@ -8541,6 +8543,20 @@
     <li class="md-nav__item">
       <a href="../probabilistic_occupancy_grid_map/pointcloud-based-occupancy-grid-map/" class="md-nav__link">
         pointcloud based occupancy grid map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../probabilistic_occupancy_grid_map/synchronized_grid_map_fusion/" class="md-nav__link">
+        synchronized OGM fusion
       </a>
     </li>
   
@@ -9885,7 +9901,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../planning/behavior_path_planner/docs/behavior_path_planner_dynamic_avoidance_design" class="md-nav__link">
+      <a href="../../planning/behavior_path_dynamic_avoidance_module" class="md-nav__link">
         Dynamic Avoidance
       </a>
     </li>
@@ -14804,6 +14820,11 @@ The information of the models is listed here:</p>
 <td><code>data_path</code></td>
 <td>str</td>
 <td>packages data and artifacts directory path</td>
+</tr>
+<tr>
+<td><code>backlight_threshold</code></td>
+<td>float</td>
+<td>If the intensity get grater than this overwrite with UNKNOWN in corresponding RoI. Note that, if the value is much higher, the node only overwrites in the harsher backlight situations. Therefore, If you wouldn't like to use this feature set this value to <code>1.0</code>. The value can be <code>[0.0, 1.0]</code>. The confidence of overwritten signal is set to <code>0.0</code>.</td>
 </tr>
 </tbody>
 </table>
